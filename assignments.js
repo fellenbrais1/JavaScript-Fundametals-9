@@ -1,5 +1,6 @@
 'use strict';
 
+// NOTES
 console.log(`Assignments 1`);
 
 const country = 'Japan';

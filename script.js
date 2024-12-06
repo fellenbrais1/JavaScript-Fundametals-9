@@ -1,5 +1,6 @@
 'use strict';
 
+// NOTES
 console.log('Course Notes');
 
 // Data needed for a later exercise
@@ -37,6 +38,7 @@ const restaurant = {
 
 // This section of the course focuses purely on the theory here, so we won't be building much of a user experience.
 
+// NOTES
 // ARRAY DESTRUCTURING
 // Destructuring is an ES6 feature and is a way of unpacking values from an array or an object into seperate variables. Destructuring is to break a complex data structure down into smaller, simpler structures.
 
@@ -130,6 +132,7 @@ console.log(p, q, r);
 const [d = 1, e = 1, f = 1, g = 1] = [8, 9];
 console.log(d, e, f, g);
 
+// NOTES
 // DESTRUCTURING OBJECTS
 // To desctructure objects, we use curly braces, instead of square brackets.
 // We need to use the same name as the property in the object, rather than an custom variable name.
@@ -270,8 +273,8 @@ restaurant2.orderDelivery({
   starterIndex: 2,
 });
 
+// NOTES
 // THE SPREAD OPERATOR ...
-
 // We can use the spread operator to unpack all elements in an array in one go.
 
 // We might want to add values to the start of an array, below are two bad ways we could do this.
@@ -366,8 +369,8 @@ restaurantCopy.restaurantName2 = 'Ristorante Roma';
 console.log(JSON.stringify(restaurantCopy, null, 2));
 console.log(JSON.stringify(restaurant2, null, 2));
 
+// NOTES
 // THE REST PATTERN AND PARAMETERS ...
-
 // The rest pattern bascially does the opposite of the spread operator, and is denoted by the same three dots. The rest pattern uses the exact same syntax, but collects multiple elements and packs them into an array.
 
 // This is an example of using the SPREAD operator as it exists on the right side of the assignment operator (=).
@@ -422,3 +425,301 @@ restaurant2.orderPizza('spinach');
 
 // We can build in some internal logic for our function to tell the user if it does not have an essential ingredient.
 restaurant2.orderPizza();
+
+// NOTES
+// SHORT CIRCUITING USING && AND ||
+// We can do a lot more with the AND and OR operators.
+
+// There are three other properties that apply to logical operators that aren't immediately apparent:
+// 1. They can use any data type.
+// 2. They can return any data type.
+// 3. They can perform 'short-circuiting' or 'short-circuit-evaluation'.
+
+// Using the OR operator ||:
+// In 'short-circuiting', the expression will look for the first truthy value in the expression, so in this case, the console prints '3'. The expression will stop and not even look at the next value or values if it finds a truthy value, thus taking a kind of short cut through the evaluation expression.
+console.log(3 || 'Michael'); // 3
+
+// In this case, 0 is a falsey value, so the expression will return the next truthy value to be printed, in this case 'Ayako'.
+console.log(0 || 'Ayako'); // Ayako
+
+// In the case that all values are falsely, the expresion will return the final value in the expression to be printed, in this case '0'.
+console.log(false || 0); // 0
+
+// In the case of more than two values in the expression, the expression will return either the first truthy value it encounters, or the final value in the expression if there are no truthy values deteced.
+console.log(0 || false || 'Michael'); // Michael
+console.log(0 || false || '' || undefined || null); // null
+
+// You can even use this syntax within the curly braces of a template literal etc.
+console.log(`Short circuit evaluation: ${false || 'hello' || 202}`); // Short circuit evaluation: hello
+
+// If we enable this line of code restaurants.numGuests will be initialized and the code below will assign the property this value of 23 instead of the default value 10.
+// restaurant.numGuests = 23;
+
+// This is one way we could set a default value in the case of a property on an object not existing, this is using more classic syntax with the ternary operator or an if/else statement.
+const guests1 = restaurant.numGuests ? restaurant.numGuests : 10;
+console.log(guests1);
+
+// This is an easier way to do the same thing by using short-circuiting. The expression will put the first truthy value found to the variable. If restaurant.numGuests does not exist it will evaluate to false, so the default value 10 will be assigned instead.
+const guests2 = restaurant.numGuests || 10;
+console.log(guests2);
+
+// Unfortunately, both of these methods would not work if the numGuests had a value of 0, as 0 counts as a falsey value in JavaScript. We can work around this by offsetting the numbers, or passing in 0 as a string that can be converted to a number when needed etc.
+
+// Using the AND operator &&
+// When we use the AND operator for short-circuiting, it does the inverse of using the OR operator. The expression will return the first falsely value it encounters, or the final value if there are no falsey values. It also stops evaluating the expression as soon as it encounters a falsey value.
+console.log('hello' && 'ayako'); // ayako
+console.log(false && 'Hello'); // false
+console.log('' && false && 'Hello'); // ''
+console.log('hello' && 'France' && 1 && true && 0); // 0
+
+// This function uses short-circuiting with the AND operator to assign the first falsey value it encounters to qualifyStatus. The bank will not give permission to anyone who doesn't have good credit, a clean criminal record, or own their own house. If all the values are truthy, the value true will be assigned to qualifyStatus and a loan approved.
+function qualifyForLoan(goodCredit, cleanRecord, homeOwner) {
+  const qualifyStatus = goodCredit && cleanRecord && homeOwner;
+  console.log(`Applicant qualified for a loan?: ${qualifyStatus}`);
+  return qualifyStatus;
+}
+
+let goodCredit = true; // This is bad if set to false
+let cleanRecord = false; // This is bad if set to false
+let homeOwner = true; // This is bad if set to false
+
+// Right now, false will be returned because one of the arguments is a falsey value.
+qualifyForLoan(goodCredit, cleanRecord, homeOwner);
+
+// If we change all of the values to true, true will be returned as the last value in the short-circuit evaluation.
+cleanRecord = true;
+qualifyForLoan(goodCredit, cleanRecord, homeOwner);
+
+// We could use an if statement to call a function on an object if it exists.
+if (restaurant2.orderPizza) {
+  restaurant2.orderPizza('mushrooms', 'spinach');
+}
+
+// We can do this in a simpler way using the AND operator and short-circuiting.
+
+// In the code below, we can use a short-circuit evaluation, we use the function name on the left side of the expression, if it exists, the expression will move on to evaluate the right side, which is actually a call to this function. If the function does not exist, the expression will just return false and stop.
+restaurant2.orderPizza &&
+  restaurant2.orderPizza('olives', 'bacon', 'extra cheese');
+
+// The function does not exist in 'restaurant', so the left side returns false and processing stops before an error can be encountered.
+restaurant.orderPizza &&
+  restaurant.orderPizza('olives', 'bacon', 'extra cheese');
+
+// We cannot reverse the order of this by using the OR operator, as soon as the code encounters a function call it cannot complete it will crash.
+// restaurant.orderPizza('peppers', 'chilli sauce', 'avacado') ||
+//   console.log(`This restaurant doesn't serve pizza!`);
+
+// The OR operator is useful for setting default values.
+// The AND operator is useful for executing code in an expression if the first value/ values is/ are true.
+
+// NOTES
+// THE NULLISH COALESCING OPERATOR ??
+// The nullish coalescing operator is denoted by '??', it is used to get around problems of 0's being evaluated to false vy default.
+
+// In this case, if the variable/ property we are evaluating has an actual value of 0, this is a problem because it will evaluate to false as a 0 counts as a falsely value. The following code will assign the default value of 10, instead of 0 as it is defined.
+restaurant.numGuests = false;
+const guests = restaurant.numGuests || 10;
+console.log(guests);
+
+// We can use the nullish coalescing operator to get around this. The following code will give use the value of 0, which is what the variable is actually set to.
+const guestCorrect = restaurant.numGuests ?? 10;
+console.log(guestCorrect);
+
+// This will return ANY value that the variable or property contains, even if it is a 0, an empty string, or false. In the case of null and undefined, the default value will be applied instead. This is a way to test if something is absent a value completely, or has had a value assigned to it at some point. We say that this operator looks for 'nullish values', which are null and undefined, these will allow the expression to continue evaluating values if found.
+
+// NOTES
+// LOGICAL ASSIGNMENT OPERATORS
+// There are three new logical assignment operators that were introduced in ES2021
+
+const rest1 = {
+  restName: 'Capri',
+  numberOfGuests: 20,
+};
+
+const rest2 = {
+  restName: 'La Piazza',
+  owner: 'Giovanni Rossi',
+};
+// Lets say we wanted to add a propery that not all objects have (adding it to the object only if it doesn't already have it)
+
+// We are giving the numberOfGuest property the value of itself, if it already exists, or 10, if it doesn't exist. Remember that the OR operator looks for the first truthy value during short-circuit-evaluation.
+// rest1.numberOfGuests = rest1.numberOfGuests || 10;
+// rest2.numberOfGuests = rest2.numberOfGuests || 10;
+
+console.log(rest1);
+console.log(rest2);
+
+// We can do the same with the owner property
+rest1.owner = rest1.owner || 'Marcus LaRaBiatta';
+rest2.owner = rest2.owner || 'Marcus LaRaBiatta';
+
+console.log(rest1);
+console.log(rest2);
+
+// The OR assignment operator ||=
+// The first logical assignment operator is the OR logical operator, which allows us to write the same thing in a more concise way.
+
+// This code does exactly the same as the code above, but in a much shorter way. The OR assignment operator assigns a value to a variable if that variable is currently falsey.
+rest1.numberOfGuests ||= 10;
+rest2.numberOfGuests ||= 10;
+
+console.log(rest1);
+console.log(rest2);
+
+// However, if we have the value of 0 in the variable, the left side of the operator will assign the value to that varibale as 0 counts as falsey.
+
+// The nullish assignment operator ??=
+// This is the nullish assigment operator, which allows us to assign a value to a variable if the variable has a nullish value like null or undefined.
+rest1.numberOfGuests ??= 10;
+rest2.numberOfGuests ??= 10;
+
+console.log(rest1);
+console.log(rest2);
+
+// The logical AND operator &&=
+// This operator allows us to replace the current value of a variable with another value. It assigns a value to a variable if it is currently truthy.
+
+// We could replace the name of an owner with the value 'Anonymous'. remember that using the AND operator here returns the first falsey value or the last value.
+rest2.owner = rest2.owner && 'Anonymous';
+console.log(rest2);
+
+// We could do the same thing in shorthand using the logical AND operator.
+rest1.owner &&= 'Anonymous';
+console.log(rest1);
+
+// NOTES
+// CHALLENGE 1
+// Building a football betting application.
+
+// We get data from a webservice about a football match, arrays of players and scores etc.
+
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
+
+// This is one way to create two arrays of players for each team.
+// const players1 = [...game.players[0]];
+// const players2 = [...game.players[1]];
+
+// This would be another way we could do this using an array destructing statement.
+const [players1, players2] = game.players;
+
+console.log(players1);
+console.log(players2);
+
+// This is one way of creating two variables, one for the first element in an array, and one for the remaining elements.
+// const gk = players1[0];
+// const fieldPlayers = players1.slice(1);
+
+// This is how we could do the same thing using the rest operator.
+const [gk, ...fieldPlayers] = players1;
+
+console.log(gk);
+console.log(fieldPlayers);
+
+const allPlayers = [...players1, ...players2];
+console.log(allPlayers);
+
+const players1Final = [...players1, 'Thiago', 'Coutinho', 'Periscic'];
+console.log(players1Final);
+
+// We could make all of these variables individually.
+// const team1 = game.odds.team1;
+// const draw = game.odds.x;
+// const team2 = game.odds.team2;
+
+// But a better way would be to use an object destructuring statement, we can change the variable x to have a name of draw as we go.
+const { team1, x: draw, team2 } = game.odds;
+
+// This is another way we could destructure to get the same result.
+// const { odds: { team1, x: draw, team2 }} = game;
+
+console.log(team1, draw, team2);
+
+function printGoals(...players) {
+  for (let i in players) {
+    if (allPlayers.includes(players[i])) {
+      console.log(`${players[i]} played in the match.`);
+      let playerScoreCount = 0;
+      if (game.scored.includes(players[i])) {
+        for (let j in game.scored) {
+          if (players[i] === game.scored[j]) {
+            playerScoreCount++;
+          }
+        }
+        let grammar = playerScoreCount === 1 ? '' : 's';
+        console.log(`He scored ${playerScoreCount} goal${grammar}!`);
+      } else {
+        console.log(`He didn't score any goals!`);
+      }
+    } else {
+      console.log(`${players[i]} didn't play in the match!`);
+    }
+  }
+}
+
+printGoals(
+  'Neuer',
+  'Martinez',
+  'Kimmich',
+  'Lewandowski',
+  'Gnarby',
+  'Cooperfield'
+);
+
+printGoals('George Crimby', 'Davies', 'Muller', 'Lewandowski', 'Kimmich');
+
+printGoals(...game.scored.slice(1));
+
+// This is one way to print the likelihood of each team to win if they have lower odds. This is a challenge to not use if or the ternary operator.
+const team1LikelyToWIn = team1 < team2 || false;
+const team2LikelyToWIn = team1 > team2 || false;
+
+console.log(
+  `Is it likely that team 1 will win the match?: ${team1LikelyToWIn}`
+);
+
+console.log(
+  `Is it likely that team 2 will win the match?: ${team2LikelyToWIn}`
+);
+
+// This is another way we could do this without using if or the ternary operator.
+team1 < team2 && console.log(`Team 1 is the favourite to win!`);
+team1 > team2 && console.log(`Team 2 is the favourite to win!`);

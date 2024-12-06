@@ -1,5 +1,6 @@
 'use strict';
 
+// NOTES
 // DESTRUCTURING ARRAYS
 console.log('Assignments 2');
 
@@ -246,6 +247,7 @@ const [fiveStarRatings = 0, oneStarRatings = 0, threeStarRatings = 0] =
   ratingStars;
 console.log(fiveStarRatings, oneStarRatings, threeStarRatings);
 
+// NOTES
 // DESTRUCTURING OBJECTS
 
 const { title, author, ISBN } = books[0];
@@ -288,6 +290,7 @@ printBookInfo({
 
 printBookInfo({ title: 'Algorithms', author: 'Robert Sedgewick' });
 
+// NOTES
 // THE SPREAD OPERATOR ...
 let bookAuthors = [...books[0].author, ...books[1].author];
 console.log(bookAuthors);
@@ -313,6 +316,7 @@ function spellWord2(word) {
 spellWord2('banana');
 spellWord2('I like ice cream on the beachhead');
 
+// NOTES
 // THE REST OPERATOR ...
 
 // Using the rest operator remember we should use square brackets as we are creating an array, and you don't need to use the variable names as they are in the object on the left side.
