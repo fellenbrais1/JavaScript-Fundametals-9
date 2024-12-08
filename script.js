@@ -1600,19 +1600,126 @@ console.log(matchEvents);
 const eventsArr = [...matchEvents];
 console.log(eventsArr);
 
-// Deleting an unfair yellow card from the gameEvents map.
+// We could also do this to convert the matchEvents map to a unique value array like this. This helps us to write the steps of creating a set and then an array from that set more concisely.
+const matchEvents2 = [...new Set(gameEvents.values())];
+console.log(matchEvents2);
+
+// Deleting an unfair yellow card from the gameEvents map using its key name.
 gameEvents.delete(64);
 console.log(gameEvents);
 
 // Printing an average time in minutes that an event happened in the match.
-const eventAverage = 90 / gameEvents.size;
+
+// To make the next part of the code as accurate as possible, we create another array of events that happened in the game and then pop off the last value, we can then use the value of this key as the maximum time in the match.
+const timeOfMatch = [...gameEvents.keys()];
+const matchLength = timeOfMatch.pop();
+console.log(matchLength);
+
+const eventAverage = matchLength / gameEvents.size;
 console.log(`An event happened on average every ${eventAverage} minutes.`);
 
 // Iterating through the map and printing out the events by the keys in order, with a condition to tell us whether the event happened in the first half, second half, or overtime.
-for (const [key, value] of gameEvents) {
-  let gameHalf = key <= 45 ? '[FIRST HALF]' : '[SECOND HALF]';
-  if (key >= 91) {
+for (const [minute, event] of gameEvents) {
+  let gameHalf = minute <= 45 ? '[FIRST HALF]' : '[SECOND HALF]';
+  if (minute >= 91) {
     gameHalf = '[OVERTIME]';
   }
-  console.log(`${gameHalf} ${key}: ${value}`);
+  console.log(`${gameHalf} ${minute}: ${event}`);
 }
+
+// NOTES
+// WORKING WITH STRINGS - PART 1
+// There are so many string methods and techniques, we won't cover all of them here, but rather go through some important ones and see how it works.
+
+console.log(`========================================`);
+
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+console.log(
+  `Thank you for flying with ${airline} on our shiny new ${[plane]}.`
+);
+
+// We can index out a character from a string using bracket indexing notation.
+console.log(plane[0]); // A
+console.log(plane[1]); // 3
+console.log(plane[2]); // 2
+console.log(plane[3]); // 0
+
+// We could do this using a slice as well. The second value of the slice specified is not included.
+console.log(airline.slice(0, 3)); // TAP
+
+// We can index or slice out values directly on the string like this.
+console.log('B737'[0]); // B
+
+// We can use the .length method to find out how long a string is
+console.log(airline.length);
+console.log('B737'.length);
+
+// The length method returns all whitespace in the string as well, whitespace is not stripped from strings automatically in JavaScript.
+const megaStr = ' abc def ghi jklmn opqrs tuv wxy  z    ';
+console.log(megaStr.length);
+
+// We can also use indexOf on strings to determine the index number of a particular element. This will only give us the first occurence of that character in the string.
+console.log(airline.indexOf('r'));
+
+// We can also ask for the lastIndexOf the character by using this command.
+console.log(airline.lastIndexOf('r'));
+
+// We can search for substrings of a string, but this is case sensitive normally, so we have to be careful about this. This will give us the index value of the start of this substring if it exists. A return value of -1 is given if the substring does not exist within the string.
+console.log(airline.indexOf('TAP')); // 0
+console.log(airline.indexOf('POOP')); // -1
+
+// Using a slice with only one value will keep going untill the end of the string after this index value.
+console.log(airline.slice(4)); // Air Portugal
+
+// None of these methods so far change the underlying string, it is not possible to change the string as it is a primitive type. All of these methods return a new string, we would have to save this to another variable and then overwrite the original variable if we wanted these changes to take root.
+
+// We could extract the first word from a string without knowing what the string will look like. This means the values for indexing and slices don't have to be hardcoded.
+
+// To extract the first word of an unknown string, we could use a slice from 0 to the index of the first whitespace character we find. We have to be careful that the string doesn't already start with whitespace, and we could strip this off before if it could be a problem.
+
+console.log(airline.slice(0, airline.indexOf(' '))); // TAP
+
+// Likewise, we could extract the last word using lastIndexOf.
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // Portugal
+
+// Getting words in the middle would be trickier, but we could find out a particular word in the string, remove it from the string, and then search for the next word until we have all the words. There are much better methods than this for this purpose later though.
+
+// Specifying a negative slcie value will start from a position near the end and then keep going from there, just like in Python.
+console.log(airline.slice(-2)); // al
+
+// This slice allows us to start at index 1 and stop at 1 index position from the end, cutting off the start and final characeters.
+console.log(airline.slice(1, -1)); // AP Air Portugal
+
+// A function that will take out a letter from a string of a seat number and tell us whether that seat is a middle seat or not.
+
+// AIRLINE SEAT LAYOUT |ABC DEF GH|
+// SEAT NUMBER LAYOUT 1A / 11A
+
+function checkMiddleSeat(seat) {
+  const row = seat.slice(-1);
+  const middleSeat = row === 'D' || row === 'E' || row === 'F' ? true : false;
+  console.log(`Is a middle seat: ${middleSeat}`);
+  return middleSeat;
+}
+
+// Testing the function with different seat numbers.
+checkMiddleSeat('11A'); // false
+checkMiddleSeat('12D'); // true
+checkMiddleSeat('23C'); // false
+checkMiddleSeat('3E'); // true
+
+// Strings are primitive types, and yet they still have methods like complex types. When we call a method on a string, the JavaScript engine will create a string object that methods can be run on. These methods will return a regular string primitive back to us to log etc.
+
+// All methods called on a string object will return a primitive string.
+
+// This process is called 'boxing', as JavaScript puts the string into a box to operate on.
+
+console.log(typeof airline); // string
+
+// When JavaScript runs a method on a string it is effectively doing the below conversion to an object, if we log the type of this new string we can see it has the type of object.
+console.log(typeof new String(airline)); // object
+
+// NOTES
+// WORKING WITH STRINGS - PART 2
