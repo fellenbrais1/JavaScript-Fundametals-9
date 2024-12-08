@@ -1384,4 +1384,235 @@ console.log(rest);
 
 // NOTES
 // MAPS: ITERATION
-//
+// There is another way of populating a map without using the .set() method. We can simply populate a set like we would in the array literal style syntax.
+
+// We could define a new Map as an array full of arrays like this. This is a more literal way of adding values to a map, and is better the initial set up than a chain of set methods. Set is better for adding elements programmatically, but this literal method is best for adding lots of pre-determined values at the same time. If a map is to be dynamically built from incoming data, a chain of set methods might be the most appropriate however.
+
+// In this map, the first value is the key, and the question and answer are contained in an array as the value.
+const quizQuestions = new Map([
+  [1, ['What country is Beijing in?', 'China']],
+  [2, ['Who "invented" the lightbulb?', 'Thomas Edison']],
+  [3, ["What is the name of Michael's Wife?", 'Ayako Jane Kishi']],
+]);
+
+// We can build a rudiementary quiz game by destructuing the map and then iterating through the keys and values.
+// let points = 0;
+// for (const [number, [question, answer]] of quizQuestions) {
+//   const playerAnswer = prompt(`${number}. ${question}`);
+//   if (playerAnswer.toLowerCase() === answer.toLowerCase()) {
+//     window.alert(`You got it right!`);
+//     points++;
+//   } else {
+//     window.alert(`Unfortunately, you got the answer wrong!`);
+//     window.alert(`The correct answer is ${answer}!`);
+//   }
+// }
+// window.alert(`You got ${points} points!`);
+// if (points >= 2) {
+//   window.alert(`Well done!`);
+// } else {
+//   window.alert('Better luck next time!');
+// }
+
+// If we create another similar map we can log it to the console to see its structure.
+const questions2 = new Map([
+  ['question', 'What is the best programming language in the world?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'JavaScript'],
+  ['correct', 3],
+  [true, 'Correct!'],
+  [false, 'Try again!'],
+]);
+
+// We can see that logging a map produces the exact same output structure as looking at .entries from an object.
+console.log(questions2);
+
+// This means there are structural and storage similarities between the two, so it is actually easy to convert between an object and a map.
+
+console.log(Object.entries(openingHours2));
+const hoursMap = new Map(Object.entries(openingHours2));
+console.log(hoursMap);
+
+// We can iterate through maps as we did above for maps are iterables.
+
+// In the below code, we iterate through the questions2 map and only log the key and value values if the key's type is 'number'. We use .get in the first line to print the question to the console.
+console.log(questions2.get('question'));
+for (const [key, value] of questions2) {
+  if (typeof key === 'number') {
+    console.log(`${key}. ${value}`);
+  }
+}
+
+// We can capture the player's answer as a number.
+// const userAnswer = Number(prompt(`Your answer?: `));
+// console.log(userAnswer);
+const userAnswer = 3;
+
+// Then we can check against this number by seeing it is the same as the value in the 'correct' key. We set questionResult either to true or false, which we can then use to .get() the values of the true or false keys in the map.
+let questionResult;
+if (userAnswer === questions2.get('correct')) {
+  questionResult = true;
+} else {
+  questionResult = false;
+}
+console.log(questions2.get(questionResult));
+
+// Sometimes we also need to convert a map back to an array, and we can do that in the following way. We simply create a new array and then unpack the contents of the map into it using the spread operator.
+console.log([...questions2]);
+
+// We can also use .entries(), .keys(), and .values() on maps in case we need them. This will look a little different in the console as the JavaScript engine has to call a special MapIterator function to do this, but will contain all the same formatted information as normal.
+console.log(questions2.entries());
+console.log(questions2.keys());
+console.log(questions2.values());
+
+// We can unoack the values into a new array if we want to get rid of the MapIterator formatting.
+console.log([...questions2.entries()]);
+console.log([...questions2.keys()]);
+console.log([...questions2.values()]);
+
+// NOTES
+// SUMMARY: WHICH DATA STRUCTURE TO USE?
+// Each data structure has pros and cons, so we need to know about these and then we can choose which data structure to use for each application.
+
+// Where does data come from?
+// 1. From the program itself: Data written directly in source code (e.g status messages).
+// 2. From the UI: Data input from the user written in the DOM (e.g. tasks in a todo app).
+// 3. From external sources: Data fetched from, for example WEB APIs (e.g. recipe information from a database).
+
+// No matter where the data comes from and what the data is, it normally comes back as a collection of data, which we will probably store in a data structure.
+
+// Of the 4 in-built data structures which one should we use?
+
+// Is it a simple list of data? - Use an array.
+// Does it need/ or have key-value pairs - Use an object or a map.
+// Does it need to be stripped of duplicate values - Use a set to do this then convert to one of the other data types as needed.
+
+// Most web data comes to us in JSON format, so we will need to parse that JSON into our data structures. JSON has data described by a key, so objects or maps will be essential as they can handle both keys and values.
+
+// We don't need to describe data in our data structure that much if it already comes back in JSON, but we might just want to take all of the elements from the JSON and put them into a simple list, like an array.
+
+// Using arrays is extremely common to store incoming data.
+
+// There are also weak maps and weak sets that can be used in JavaScript, but we will cover these later.
+
+// There are many other data structures used in other languages but not in JavaScript, but we may have to deal with these in some circumstances.
+
+// Simple lists of values - Arrays or Sets?
+// ARRAYS:
+// - Use when you need ordered lists of values that might contain duplicates.
+// - Use when you need to manipulate data.
+
+// SETS:
+// Use when you need to work with unique values.
+// Use when high-performance is really important, as the methods that run on sets are WAY faster than methods that run on arrays.
+// Use to remove duplicates from arrays.
+
+// Key-value stores - Objects or Maps?
+// OBJECTS:
+// More traditional key/value stores, but this is partly because this is all JavaScript had before ES6. Some people think objects are an abused data structure as maps are actually better at this.
+// Easier to write and access values with dot and bracket indexing.
+// Can use the 'this' keyword to access properties on the same object, which is impossible with maps.
+
+// Use when we need to include function (methods).
+// Use when you need a data structure to refer to something within itself using the 'this' keyword.
+// Use when working with JSON, (it can be converted to a map easily later).
+
+// MAPS:
+// Better performance.
+// Keys can have any data type.
+// Easy to iterate through.
+// Easy to comput their size.
+
+// Use when you simply need to map keys to values.
+// Use when you need keys that are NOT strings.
+
+// NOTES
+// CHALLENGE 3
+// Still working on our football betting app.
+
+// Dropping a duplicate of the game2 object here for reference.
+
+// const game2 = {
+//   team1: 'Bayern Munich',
+//   team2: 'Borrussia Dortmund',
+//   players: [
+//     [
+//       'Neuer',
+//       'Pavard',
+//       'Martinez',
+//       'Alaba',
+//       'Davies',
+//       'Kimmich',
+//       'Goretzka',
+//       'Coman',
+//       'Muller',
+//       'Gnarby',
+//       'Lewandowski',
+//     ],
+//     [
+//       'Burki',
+//       'Schulz',
+//       'Hummels',
+//       'Akanji',
+//       'Hakimi',
+//       'Weigl',
+//       'Witsel',
+//       'Hazard',
+//       'Brandt',
+//       'Sancho',
+//       'Gotze',
+//     ],
+//   ],
+//   score: '4:0',
+//   scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+//   date: 'Nov 9th, 2037',
+//   odds: {
+//     team1: 1.33,
+//     x: 3.25,
+//     team2: 6.5,
+//   },
+// };
+
+console.log(`========================================`);
+
+// Creating a new map to hold the value in minutes when a game event happened, and a value holding what the event was.
+const gameEvents = new Map([
+  [17, 'GOAL'],
+  [36, 'Substitution'],
+  [47, 'GOAL'],
+  [61, 'Substitution'],
+  [64, 'Yellow card'],
+  [69, 'Red card'],
+  [70, 'Substitution'],
+  [72, 'Substitution'],
+  [76, 'GOAL'],
+  [80, 'GOAL'],
+  [92, 'Yellow card'],
+]);
+console.log(gameEvents);
+
+// Creating a new set to strip out all duplicate events from the map.
+const matchEvents = new Set(gameEvents.values());
+console.log(matchEvents);
+
+// Converting this set back to an array.
+const eventsArr = [...matchEvents];
+console.log(eventsArr);
+
+// Deleting an unfair yellow card from the gameEvents map.
+gameEvents.delete(64);
+console.log(gameEvents);
+
+// Printing an average time in minutes that an event happened in the match.
+const eventAverage = 90 / gameEvents.size;
+console.log(`An event happened on average every ${eventAverage} minutes.`);
+
+// Iterating through the map and printing out the events by the keys in order, with a condition to tell us whether the event happened in the first half, second half, or overtime.
+for (const [key, value] of gameEvents) {
+  let gameHalf = key <= 45 ? '[FIRST HALF]' : '[SECOND HALF]';
+  if (key >= 91) {
+    gameHalf = '[OVERTIME]';
+  }
+  console.log(`${gameHalf} ${key}: ${value}`);
+}
