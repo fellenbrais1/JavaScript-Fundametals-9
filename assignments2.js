@@ -317,8 +317,7 @@ spellWord2('banana');
 spellWord2('I like ice cream on the beachhead');
 
 // NOTES
-// THE REST OPERATOR ...
-
+// THE REST PATTERN AND PARAMETERS ...
 // Using the rest operator remember we should use square brackets as we are creating an array, and you don't need to use the variable names as they are in the object on the left side.
 const [mainKeyword, ...rest] = books[0].keywords;
 console.log(`Main: ${mainKeyword}, Others: ${rest}`);
@@ -349,3 +348,7 @@ printBookAuthorsCount(books[7].title, ...books[7].author);
 for (let i = 0; i < books.length; i++) {
   printBookAuthorsCount(books[i].title, ...books[i].author);
 }
+
+// NOTES
+// SHORT CIRCUITING || AND &&
+//
