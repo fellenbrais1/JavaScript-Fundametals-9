@@ -1698,7 +1698,7 @@ console.log(airline.slice(1, -1)); // AP Air Portugal
 // SEAT NUMBER LAYOUT 1A / 11A
 
 function checkMiddleSeat(seat) {
-  const row = seat.slice(-1);
+  const row = seat.slice(-1); // Captures the last character in the string
   const middleSeat = row === 'D' || row === 'E' || row === 'F' ? true : false;
   console.log(`Is a middle seat: ${middleSeat}`);
   return middleSeat;
@@ -1723,3 +1723,368 @@ console.log(typeof new String(airline)); // object
 
 // NOTES
 // WORKING WITH STRINGS - PART 2
+// There are methods to change the case of a string. These methods take no arguments.
+console.log(airline.toLowerCase());
+console.log(airline.toUpperCase());
+
+// We can also call this directly on a string.
+console.log('Michael'.toUpperCase());
+
+// We can use these to fix the capitalisation of a name in the case that it is wrong. We could start but putting everything into lowercase and then putting the first character into uppercase.
+const passenger = 'mIKAlos';
+const passengerLower = passenger.toLowerCase();
+const passengerFirst = passenger[0].toUpperCase();
+const correctedPassenger = passengerFirst + passengerLower.slice(1);
+console.log(correctedPassenger);
+
+// We could also do the slice index when creating passengerLower as well. We could have also put this into a function.
+
+// This function makes use of .split('') to split a string into an array of characters contained within, and .join('') to connect all the values in this array back into a string. It uses deconstruction to get the first element of this array as the first letter, which is then capitalized, and then the rest of the characters which are put into lower case. At the end, both strings are concatenated and logged.
+function fixCapitals(incorrectName) {
+  const nameArr = incorrectName.split('');
+  let [first, ...rest] = nameArr;
+  first = first.toUpperCase();
+  rest = rest.join('').toLowerCase();
+  let newRest = rest.split('');
+  if (newRest[0] === 'c' && newRest[1] === 'c') {
+    newRest[1] = newRest[1].toUpperCase();
+  }
+  newRest = newRest.join('');
+  const corrected = first + newRest;
+  console.log(corrected);
+  return corrected;
+}
+
+fixCapitals('bOB');
+
+// The function doesn't yet handle spaces in strings, so likely the first name and last name could be fed in separately and then united later.
+fixCapitals('miChaeL MCCann');
+
+// This next function takes in two names as arguments, calls fixCapitals() on each name and then returns them as a full name with names separated with a space. This would need more work to return longer names and names with custom capitalisation like McCann.
+function uniteNames(firstName, lastName) {
+  const correctedFirst = fixCapitals(firstName);
+  const correctedLast = fixCapitals(lastName);
+  const correctedFull = correctedFirst + ' ' + correctedLast;
+  console.log(correctedFull);
+  return correctedFull;
+}
+
+// I have now added support for the custom cC capitalisation in the name 'McCann'.
+uniteNames('michAEl', 'mCCANN'); // Michael McCann
+
+// It is usually a good idea to convert strings into lower case for matching and checking purposes, especially when concerning user input, which could be incorrect or strange. It can be very bad UX when something isn't working even though the user thinks they are pressing the correct keys.
+
+// These methods come in handy for checking if things are the same or not. Below, the two emails are basically the same, so we need to make the computer check for this.
+const email2 = 'hello@mike.com';
+const loginEmail = '   Hello@Mike.com\n';
+
+// First we convert the loginEmail to lowercase.
+const lowerEmail = loginEmail.toLowerCase();
+
+// Then we use the .trim() method to remove whitespace and enter characters from either side of the string.
+const trimmedEmail = lowerEmail.trim();
+console.log(trimmedEmail);
+
+// Now we can check for equality between the two strings.
+if (email2 === trimmedEmail) {
+  console.log('The email addresses match!');
+} else {
+  console.log(`The emails do not match: ${email2} / ${trimmedEmail}`);
+}
+
+// We could also chain these methods together to make things more streamlined.
+const normalizedEmail = loginEmail.trim().toLowerCase();
+console.log(normalizedEmail);
+
+// This is the same code but as a function.
+function compareEmails(officialEmail, typedEmail) {
+  console.log(officialEmail, typedEmail);
+  const normalizedEmail = typedEmail.trim().toLowerCase();
+  if (officialEmail === normalizedEmail) {
+    console.log(`These emails match!`);
+    return true;
+  } else {
+    console.log(
+      `These emails do not match: ${officialEmail} / ${normalizedEmail}`
+    );
+    return false;
+  }
+}
+
+compareEmails('mike@moomoo.co.uk', 'MiKE@MOOMOO.co.uk'); // true
+compareEmails('mike@moomoo.co.uk', 'MiKE@MOOMOOO.co.uk'); // false
+
+// Since ES2019, there is also .trimStart() and .trimEnd() to only remove whitespace from either the start or the end of a string selectively.
+
+// Replacing parts of strings.
+// For example, we might need to change formatting and things like currency symbols when converting between different countries and systems etc.
+
+// In the below example, the priceGB is in pounds, whereas it has to be in dollars when as priceUS, also, mainland Europe uses a comma as a numerical separator, whereas the US uses a period. We need to replace these strings when converting.
+const priceGB = '£288,97';
+console.log(priceGB);
+
+// The .replace() method takes in two arguments, the first is the targetted string you would like to replace. The second is what you would like it replaced with.
+const priceUS = priceGB.replace('£', '$').replace(',', '.');
+console.log(priceUS);
+
+// We can also replace entire words and sections of longer strings.
+const announcement =
+  'All passengers please come to boarding door 23. Boarding door 23!';
+
+// However, .replace() will only replace the first occurence of the targetted string, similar to how addEventListener only adds the listener to the first occurence of the query.
+console.log(announcement.replace('door', 'gate'));
+
+// But we can use the .replaceAll() method to replace all of the instances of the targetted string.
+console.log(announcement.replaceAll('door', 'gate'));
+
+// Regular Expressions - Regex
+// If we can't use replaceAll() because we are using an old system etc., we can use a regex to tell the replace method to replace all occurences of the targetted string.
+
+// Regexs are written between // instead of '' and the /g acts as a global tag, to tell the replace function to replace any occurence of this string.
+
+// Regexs are very complicated, and will be covered in more detail later.
+console.log(announcement.replace(/door/g, 'gate'));
+
+// Booleans
+// There are various methods to return a Boolean from a string. These are .includes(), .startsWith() and .endsWith()
+
+const newPlane = 'Airbus A320neo';
+console.log(newPlane);
+
+// .includes() tells us if a string includes a substring.
+console.log(newPlane.includes('A320')); // true
+console.log(newPlane.includes('Beoing')); // false
+
+// .startsWith() tells is if a string starts with a substring.
+console.log(newPlane.startsWith('f')); // false
+console.log(newPlane.startsWith('A')); // true
+
+// We can check for strings of more than one character with this as well.
+console.log(newPlane.startsWith('Air')); // true
+console.log(newPlane.startsWith('AIR')); // false
+
+// .endsWith() tells us if a string ends with a substring.
+// These are very useful for writing conditionals based on a string.
+if (newPlane.startsWith('Airbus') && newPlane.endsWith('neo')) {
+  console.log('Part of the NEW Airbus family');
+}
+
+// The next function will iterate through this list of contraband, and if the passengers baggage statement includes any of these it will flag the passenger as a potential flight risk.
+const contraband = ['knife', 'gun', 'explosives', 'poison', 'sword', 'c4'];
+
+const checkBaggage = function (items) {
+  let flightRisk = false;
+  const lowerString = items.toLowerCase();
+  for (const bannedItem of contraband) {
+    if (lowerString.includes(bannedItem)) {
+      flightRisk = true;
+      break;
+    }
+  }
+  if (flightRisk) {
+    console.log(
+      'This passenger is a potential flight risk! Search them further.'
+    );
+  } else {
+    console.log('This passenger is clean. Allow them to board.');
+  }
+  return flightRisk;
+};
+
+// checkBaggage determines if a passenger is a flight risk or not depending on their baggage inspection statement.
+checkBaggage('I have a laptop, some food, and a pocket knife.'); // true
+checkBaggage('Socks and a camera.'); // false
+checkBaggage('Got some snacks and a gun for protection.'); // true
+checkBaggage('I am selling these fine leather jackets.'); // false
+checkBaggage('I carry a small sword at all times and a vial of deadly poison.'); // true
+
+// Be careful of false positives due to context, but these are incredibly difficult to program out. This is where human intervention is probably needed.
+
+checkBaggage('I am sitting in seat c4.'); // true but they didn't mean the contradband item, they meant something else
+
+// NOTES
+// WORKING WITH STRINGS - PART 3
+
+// .split() splits up a string into an array using a specified separator or an empty string, which will split every character apart.
+console.log('a+very+nice+string'.split('+')); // ['a', 'very', 'nice', 'string']
+
+// We can use this in conjunction with destructuring to capture pieces of the string as new variables.
+const [firstName2, lastName2] = 'Michael McCann'.split(' ');
+console.log(firstName2, ',', lastName2); // Michael , McCann
+
+// .join() connects elements in an array into one string if possible. We can use this to easily concatenate multiple pieces of data into a string. In the parentheses we specify the separator between the joined pieces, or nothing in the case of ''.
+const newName2 = ['Mr.', firstName2, lastName2.toUpperCase()].join(' ');
+console.log(newName2); // Mr. Michael MCCANN
+
+const names = [firstName2, lastName2].join(' ');
+console.log(names); // Michael McCann
+
+// A function to take in a long name string and capitalize the first letter of each name, returning it as a new string.
+function capitalizeNames(name) {
+  const names = name.split(' ');
+  let newNameArray = [];
+  for (const passengerName of names) {
+    console.log(passengerName);
+    // newNameArray.push(passengerName[0].toUpperCase() + passengerName.slice(1));
+    // This is another way we could modify the first letter, replacing whatever the letter is with the same letter in upper case.
+    newNameArray.push(
+      (passengerName.replace[0], passengerName[0].toUpperCase()) +
+        passengerName.slice(1)
+    );
+  }
+  const fullName = [newNameArray.join(' ')];
+  console.log(fullName);
+  return fullName;
+}
+
+const passenger2 = 'jessica ann smith davis';
+
+capitalizeNames(passenger2);
+
+// Padding a string
+// We can add characters to a string until the string is at a certain length.
+
+const message = 'Go to gate 23!';
+
+// To use .padStart() or .padEnd() we specify the intended length of the string, and the character we want to pad it with. Specifying '' will have no effect as nothing will be added to the string.
+console.log(message.padStart(25, '+'));
+
+console.log(message.padEnd(25, '+'));
+
+// We can pad the start and the end of a string at the same time with a chained set of methods.
+console.log('Michael McCann'.padStart(20, '-').padEnd(30, '-'));
+
+// This might be used for a particular function online, such as showing the last four digits of a credit card number, and replacing the other characters with * or something similar.
+
+function obsfuscateCardNumber(cardNumber) {
+  // const stringNumber = String(cardNumber);
+
+  // This is an easy way of converting a number to a string, JavaScript will infer the type as 'string' if we add a string to a number.
+  const stringNumber = cardNumber + '';
+
+  const lastFour = stringNumber.slice(-4);
+  const obsfuscatedNumber = lastFour.padStart(stringNumber.length, '*');
+  console.log(obsfuscatedNumber);
+  return obsfuscatedNumber;
+}
+
+obsfuscateCardNumber(103565433212);
+obsfuscateCardNumber(338947212);
+
+// Repeat
+// We can use the .repeat() method to allow us to repeat the same string multiple times. This might be useful in generating a long banner style string.
+
+const message3 = 'Bad weather... All departures delayed... ';
+
+// The .repeat() method takes a number of times to repeat as an argument.
+console.log(message3.repeat(5));
+
+// We could generate this repeat number programmatically if we want.
+const planesInLine = function (n) {
+  console.log(`There are ${n} planes in line... ${'✈️ '.repeat(n)}`);
+};
+
+planesInLine(3);
+planesInLine(12);
+
+// There are many more methods and intricacies in using the methods, we can research them on MDN if we need to find a method to do something specific.
+
+// CHALLENGE 4
+// Iterating through a user specified list of variable names separated by newlines, then converting these into camelCase after removing any whitespace. We will also print a graphic '☑️' as we log each converted item that increments up and repeats more times as the list goes on.
+
+// Values to enter into the textbox for testing.
+// underscore_case
+//  first_Name
+// Some_Variable
+//   calculate_AGE
+// delayed_departure
+
+console.log('===================================');
+
+// DOM manipulation to add the required new elements to the webpage for testing, a variable 'text' is created based on the contents of the 'textarea' element. An event listener is also added to the 'button' element to allow the function tp run when clicked.
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+const text = document.querySelector('textarea');
+document.querySelector('button').addEventListener('click', splitInput);
+
+const errorMessage = 'No valid variable name found';
+
+// This function splits a variable name fed in into two pieces, applies lowercase to all, then capitalizes the first letter of the second word before putting the two back together again.
+function tidyVariableName(variableName) {
+  variableName = variableName.replaceAll('_', ' ');
+  let newVariableName;
+  if (!variableName) {
+    const error = errorMessage;
+    return error;
+  }
+  if (!variableName.includes(' ')) {
+    newVariableName = variableName.toLowerCase();
+    return newVariableName;
+  } else {
+    const [...names] = variableName.toLowerCase().trim().split(' ');
+    let i = 0;
+    for (const nameData of names) {
+      console.log(nameData);
+      if (i === 0) {
+        newVariableName = nameData;
+        i++;
+      } else {
+        newVariableName += nameData[0].toUpperCase();
+        newVariableName += nameData.slice(1);
+        i++;
+      }
+    }
+    return newVariableName;
+  }
+}
+
+// This function splits the user input into chunks separated by a newline character. Then it feeds these one by one to tidyVariableName() to process them into camelCase. After this it handles the console.log as required.
+function splitInput() {
+  const totalInput = text.value;
+  console.log(totalInput);
+  const inputs = totalInput.split('\n');
+  let repeatCount = 1;
+  let newInputArray = [];
+  for (const input of inputs) {
+    let newInput = tidyVariableName(input);
+    newInputArray.push(newInput);
+  }
+  for (const value of newInputArray) {
+    if (value === errorMessage) {
+      console.log(`${errorMessage.padEnd(30, ' ')} ❌`);
+    } else {
+      console.log(`${value.padEnd(30, ' ')} ${'☑️'.repeat(repeatCount)}`);
+      repeatCount++;
+    }
+  }
+}
+
+// These process now handles variable names of any number of words, printing an error message in the case of an empty line. The '_' between words is replaced with ' ', so users should be able to specify variable names with spaces as well.
+
+// If we want tp pad a string with empty spaces, we can actually just specify the number to pad to, and omit the second argument. (Empty spaces are the default argument used by padding).
+
+// NOTES
+// EXTRA STRING EXERCISES
+// We are going to transform the mass of data below into a nicely formatted output.
+
+const flights2 =
+  '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+
+const datums = flights2.split('+');
+console.log(datums);
+
+for (const datumArr of datums) {
+  let alert = '  ';
+  let [event, dest1, dest2, time] = datumArr.split(';');
+  event = event.replaceAll('_', ' ').trim();
+  if (event.includes('Delayed')) {
+    alert = '🔴';
+  }
+  dest1 = dest1.slice(0, 3).toUpperCase();
+  dest2 = dest2.slice(0, 3).toUpperCase();
+  time = `(${time})`.replace(':', 'h');
+
+  console.log(
+    `${alert} ${event} from ${dest1} to ${dest2} ${time}`.padStart(50)
+  );
+}
