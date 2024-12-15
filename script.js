@@ -957,7 +957,7 @@ console.log(users2[1]?.userName ?? 'Array does not include that element');
 
 // NOTES
 // LOOPING OBJECTS: OBJECT KEYS, VALUES, AND ENTRIES
-// We can use for-of loops to loop through iterables, we can a;so loop through objects, but in a different way. How we do this depends on what we want to loop over, the object's property names (or 'keys'), its values, or both together.
+// We can use for-of loops to loop through iterables, we can also loop through objects, but in a different way. How we do this depends on what we want to loop over, the object's property names (or 'keys'), its values, or both together.
 
 // Looping over object keys / property names
 // We have to do this in an indirect way by creating an array, as we are not allowed to directly iterate over an object.

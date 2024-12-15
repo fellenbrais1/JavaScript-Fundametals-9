@@ -351,4 +351,178 @@ for (let i = 0; i < books.length; i++) {
 
 // NOTES
 // SHORT CIRCUITING || AND &&
-//
+// Added code to filter out false positives from 'JavaScript', we are only checking for 'Java' in this example.
+function hasExamplesInJava(book) {
+  return (
+    (!book.programmingLanguage?.includes('JavaScript') &&
+      book.programmingLanguage?.includes('Java')) ||
+    'No data found'
+  );
+}
+
+for (const i of books) {
+  const result = hasExamplesInJava(i);
+  console.log(`${i.title} -- contains Java: ${result}`);
+}
+
+function hasOnlineContent(books) {
+  console.log('================================');
+  for (const i of books) {
+    i.onlineContent && console.log(`${i.title} provides online content`);
+  }
+}
+
+// NOTES
+// NULLISH COALESCING OPERATOR ??
+function hasNoOnlineContent(books) {
+  console.log('================================');
+  for (const i of books) {
+    i.onlineContent ??
+      console.log(`${i.title} provides no data about its online content`);
+  }
+}
+
+hasOnlineContent(books);
+hasNoOnlineContent(books);
+
+//NOTES
+// FOR-OF LOOPS
+function addEdition(books) {
+  console.log('==============================');
+  for (const i of books) {
+    i.edition ||= 1;
+    console.log(i.title, i.edition);
+  }
+}
+
+addEdition(books);
+
+// NOTES
+// LOGICAL ASSIGNMENT OPERATORS ||=, &&=, ??=
+function changeHighlight(books) {
+  console.log('==============================');
+  for (const i of books) {
+    i.highlighted ||= true;
+    i.highlighted &&= i.thirdParty.goodreads.rating > 4.2;
+    console.log(
+      `${i.title}, ${i.thirdParty.goodreads.rating} ${i.highlighted}`
+    );
+  }
+}
+
+changeHighlight(books);
+
+let totalPageCount = 0;
+for (const book in books) {
+  totalPageCount += books[book].pages;
+  console.log(totalPageCount);
+}
+console.log(`Final page count of all books is: ${totalPageCount}`);
+
+// This code iterates through all of the books authors and adds them to a new array of all authors, if the author property of a book is a string, it just adds this string to the array, if the author property is an array, it iterates through the array and adds each individual author in it to the all authors array.
+function accumulateAuthors(books) {
+  console.log('======================');
+  const allAuthors = [];
+  for (const i of books) {
+    const authors = i.author;
+    if (typeof authors === 'string') {
+      allAuthors.push(authors);
+    } else {
+      for (const j of authors) {
+        allAuthors.push(j);
+      }
+    }
+  }
+  return allAuthors;
+}
+
+const allAuthors = accumulateAuthors(books);
+console.log(allAuthors);
+
+for (const author of allAuthors.entries()) {
+  console.log(`${author[0] + 1}. ${author[1]}`);
+}
+
+// NOTES
+// ENHANCED OBJECT LITERALS
+const bookData = [
+  ['title', 'Computer Networking: A Top-Down Approach'],
+  ['author', ['James F. Kurose', 'Keith W. Ross']],
+  ['publisher', 'Addison Wesley'],
+];
+
+const newBook = {
+  [bookData[0][0]]: bookData[0][1],
+  [bookData[1][0]]: bookData[1][1],
+  [bookData[2][0]]: bookData[2][1],
+};
+
+console.log(newBook);
+console.log(JSON.stringify(newBook));
+
+const pages = 880;
+
+const newBook2 = {
+  title: 'The C Programming Language',
+  author: ['Brian W. Kernighan', 'Dennis M. Ritchie'],
+  pages,
+};
+
+console.log(newBook2);
+
+// NOTES
+// OPTIONAL CHAINING
+function getFirstKeyword(book) {
+  const first = book.keywords?.[0];
+  console.log(first);
+}
+
+for (const book of books) {
+  getFirstKeyword(book);
+}
+getFirstKeyword(newBook2);
+
+// NOTES
+// LOOPING OBJECTS: OBJECT KEYS, VALUES, AND ENTRIES
+
+let entries = [];
+
+function collectKeys(book) {
+  const thirdPartyObject = book.thirdParty.goodreads;
+  console.log(thirdPartyObject);
+  for (const key of Object.keys(thirdPartyObject)) {
+    console.log(key);
+    entries.push([key]);
+  }
+  console.log(entries);
+}
+
+// For one book.
+collectKeys(books[0]);
+
+// For all books.
+// for (const book of books) {
+//   collectKeys(book);
+// }
+
+function collectValues(book) {
+  const thirdPartyObject = book.thirdParty.goodreads;
+  for (const [key, value] of Object.entries(thirdPartyObject)) {
+    console.log(key, value);
+    for (const entry of entries) {
+      if (entry[0] === key) {
+        entry.push(value);
+        break;
+      }
+    }
+  }
+  console.log(entries);
+}
+
+collectValues(books[0]);
+
+const entries2 = Object.entries(books[0].thirdParty.goodreads);
+console.log(entries2);
+
+// NOTES
+// SETS
