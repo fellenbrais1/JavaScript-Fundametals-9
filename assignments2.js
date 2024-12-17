@@ -526,3 +526,241 @@ console.log(entries2);
 
 // NOTES
 // SETS
+
+console.log('=====================================');
+
+const allKeyWords = [];
+
+function iterateAllKeywords(books) {
+  for (const book of books) {
+    allKeyWords.push(...book.keywords);
+  }
+  const uniqueKeywords = new Set(allKeyWords);
+  return uniqueKeywords;
+}
+
+const uniqueKeywords = iterateAllKeywords(books);
+console.log(uniqueKeywords);
+
+uniqueKeywords.add('coding').add('science');
+
+console.log(uniqueKeywords);
+
+uniqueKeywords.delete('business');
+
+console.log(uniqueKeywords);
+
+const newKeyWordArr = [...uniqueKeywords];
+console.log(newKeyWordArr);
+
+// This is a clunkier way of deleting all values from a set
+// for (const item of uniqueKeywords) {
+//   uniqueKeywords.delete(item);
+// }
+
+// The simpler way is to use the .clear() method.
+uniqueKeywords.clear();
+console.log(uniqueKeywords);
+
+// NOTES
+// MAPS: FUNDAMENTALS
+const bookMap = new Map([
+  ['title', 'Clean Code'],
+  ['author', 'Robert C. Martin'],
+]);
+console.log(typeof bookMap, bookMap);
+
+bookMap.set('pages', 464);
+console.log(bookMap);
+
+console.log(`${bookMap.get('title')} by ${bookMap.get('author')}`);
+
+console.log(bookMap.size);
+
+const hasAuthor = bookMap.has('author');
+if (hasAuthor) {
+  console.log(`The author of the book is known. (${bookMap.get('author')})`);
+}
+
+// Slightly simpler syntax
+if (bookMap.has('author')) console.log(`The author is known`);
+
+// NOTES
+// MAPS: ITERATION
+console.log(books[0]);
+
+const firstBook2 = new Map(Object.entries(books[0]));
+console.log(firstBook2);
+
+for (const [key, value] of firstBook2) {
+  if (typeof value === 'number') {
+    console.log(key);
+  }
+}
+
+// NOTES
+// WORKING WITH STRINGS - PART 1
+
+const isbn = books[0].ISBN;
+console.log(isbn);
+
+console.log(isbn[6], isbn[4], isbn[9], isbn[8]);
+
+const quote =
+  'A computer once beat me at chess, but it was no match for me at kick boxing';
+
+const indexOfChess = quote.indexOf('chess');
+console.log(indexOfChess);
+
+// Extracting the last word to print in a specific manner, kind of redundant.
+const indexOfBoxing = quote.indexOf('boxing');
+console.log(quote.slice(indexOfBoxing));
+
+// Another way to do this top specifically extract the last word regardless of what it is.
+console.log(quote.slice(quote.lastIndexOf(' ') + 1));
+
+function isContributor(book) {
+  let authors;
+  if (typeof book.author === 'string') {
+    authors = [book.author];
+    console.log(authors);
+  } else {
+    authors = [...book.author];
+    console.log(authors);
+  }
+  for (const person of authors) {
+    if (person.includes('(Contributor)')) {
+      const contributor = true;
+      console.log(
+        `${person.slice(
+          0,
+          person.indexOf('(Contributor)') - 1
+        )} is a contributor: ${contributor}`
+      );
+    }
+  }
+}
+
+isContributor(books[1]);
+
+for (const book of books) {
+  isContributor(book);
+}
+
+function isContributor2(author) {
+  return author.lastIndexOf('(Contributor)') !== -1;
+}
+
+for (const person of [...books[1].author]) {
+  console.log(person);
+  console.log(isContributor2(person));
+}
+
+// NOTES
+// WORKING WITH STRINGS - PART 2
+
+function normalizeAuthorName(authorName) {
+  authorName = authorName.trim();
+  if (authorName.includes('(Contributor)')) {
+    authorName = authorName.slice(0, authorName.indexOf('(Contributor)'));
+  }
+  let firstName = authorName.slice(0, authorName.indexOf(' '));
+  let lastName = authorName.slice(authorName.indexOf(' ') + 1);
+  firstName = firstName[0].toUpperCase() + firstName.slice(1);
+  lastName = lastName[0].toUpperCase() + lastName.slice(1);
+  console.log(firstName, lastName);
+}
+
+normalizeAuthorName('Bob Sedgewick');
+normalizeAuthorName('Michael McCann (Contributor)');
+
+for (const book of books) {
+  if (typeof book.author === 'string') {
+    normalizeAuthorName(book.author);
+  } else {
+    for (const person of [...book.author]) {
+      normalizeAuthorName(person);
+    }
+  }
+}
+
+console.log(books[1].title);
+books[1].title = books[1].title.replace('Programs', 'Software');
+console.log(books[1].title);
+
+console.log('======================================');
+
+function logBookTheme(title) {
+  const lowerTitle = title.trim().toLowerCase();
+  // console.log(lowerTitle);
+  if (lowerTitle.startsWith('computer')) {
+    console.log(title, '---');
+    console.log(`This book is about computers`);
+  }
+  if (lowerTitle.includes('algorithms') && lowerTitle.includes('structures')) {
+    console.log(title, '---');
+    console.log(`This book is abvout algorithms and structures`);
+  }
+  if (
+    (lowerTitle.endsWith('system') || lowerTitle.endsWith('systems')) &&
+    !lowerTitle.includes('operating')
+  ) {
+    console.log(title, '---');
+    console.log(
+      `This book is about some systems, but definitely not about operating systems`
+    );
+  }
+}
+
+for (const book of books) {
+  logBookTheme(book.title);
+}
+
+// NOTES
+// WORKING WITH STRINGS - PART 3
+
+console.log('======================================');
+
+const bookCategories =
+  'science;computing;computer science;algorithms;business;operating ststems;networking;electronics';
+
+function logBookCategories(bookCategories) {
+  const splitArr = [...bookCategories.split(';')];
+  for (const item of splitArr) {
+    console.log(item);
+  }
+}
+
+logBookCategories(bookCategories);
+
+function getKeywordsAsString(books) {
+  let megaString = '';
+  for (const book of books) {
+    const keyWordString = [...book.keywords].join(';');
+    console.log(keyWordString);
+    megaString += keyWordString;
+  }
+  const megaSet = new Set(megaString.split(';'));
+  console.log(megaSet);
+  megaString = [...megaSet];
+  console.log(megaString.join(';'));
+}
+
+getKeywordsAsString(books);
+
+const bookChapters = [
+  ['The Basics', 14],
+  ['Sorting', 254],
+  ['Searching', 372],
+  ['Graphs', 526],
+  ['Strings', 706],
+];
+console.log(bookChapters);
+
+function logBookChapters(bookChapters) {
+  for (const [chapter, pages] of bookChapters) {
+    console.log(`${chapter.padEnd(30, '_')} ${pages}`);
+  }
+}
+
+logBookChapters(bookChapters);
