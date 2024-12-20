@@ -2088,3 +2088,69 @@ for (const datumArr of datums) {
     `${alert} ${event} from ${dest1} to ${dest2} ${time}`.padStart(50)
   );
 }
+
+// NOTES
+// NEW OPERATIONS TO MAKE SETS USEFUL
+// In ES2025 sets got seven more methods which make sets a lot more useful and important, especially when dealing with arrays. it also brings them into line with what sets are and what sets do in other programming languages where they are an important datastructure.
+
+// Some of these methods will only work on the latest browsers, as they are very new.
+
+const italianFoods = new Set([
+  'pasta',
+  'gnocchi',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+// Say we want to find out which ingredients are common between the two sets.
+
+// INTERSECTION 'intersection()'
+// The first new method is the intersection method. We call this by dot-indexing it onto one set, and then specifying the other set(s) to check in the parentheses. The order in which we specify the sets is not important for this method.
+const commonFoods = italianFoods.intersection(mexicanFoods);
+console.log(commonFoods);
+console.log([...commonFoods]);
+
+// UNION '.union()'
+// The union gives us all of the values in both sets, without any duplicates, it is basically a way of uniting sets into one set. The order in which we specify the sets is not important for this method.
+const italianMexicanFusion = italianFoods.union(mexicanFoods);
+console.log(italianMexicanFusion);
+console.log([...italianMexicanFusion]);
+
+// We could also do this by creating a brand new array and then using the spread operator to put all the values in there. Then we could change this to a set and we would get the same result overall. The downside with this is that the syntax can get a little confusing.
+console.log([...new Set([...italianFoods, ...mexicanFoods])]);
+
+// DIFFERENCE '.difference()'
+// This method gives us a new set that contains all of the elements present in the first set, but NOT in the second one. This means we will get a set containig elements only present to the first set. Here the order we specify the sets in is important.
+const uniqueItalianFoods = italianFoods.difference(mexicanFoods);
+console.log(uniqueItalianFoods);
+console.log([...uniqueItalianFoods]);
+
+const uniqueMexicanFoods = mexicanFoods.difference(italianFoods);
+console.log(uniqueMexicanFoods);
+console.log([...uniqueMexicanFoods]);
+
+// SYMMETRIC DIFFERENCE 'symmetricDifference()'
+// This is the opposite of the intersection method, which will give us elements that are unique in either set, but NOT in both.
+const uniqueFoods = italianFoods.symmetricDifference(mexicanFoods);
+console.log(uniqueFoods);
+console.log([...uniqueFoods]);
+
+// The other three methods have niche value, such as checking whether a set is a member of another set or not. They won't be covered so much here.
+
+// isSubsetOf() - checks if a set is a subset of another set.
+// isSuperSetOf() - checks if a set is a superset of another set.
+// isDisjointFrom() - checks whether one set is completely different from another set or not.
+
+console.log(italianFoods.isDisjointFrom(mexicanFoods)); // false
+// We can see that the return of false tells us that these sets are not completely different and that the sets contain some common values.
